@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
       maxWidth: 360,
       backgroundColor: theme.palette.background.paper,
+      [theme.breakpoints.down('sm')]: {
+        display:"none"
+      },
     },
     sidebarHeading:{
         marginRight:"auto"
@@ -46,6 +49,7 @@ const Sidebar = () =>{
   };
 
   return (
+    <div>
     <List
       component="nav"
       aria-labelledby="nested-list-subheader"
@@ -196,6 +200,7 @@ const Sidebar = () =>{
         </List>
       </Collapse>
     </List>
+    </div>
   );
 }
 

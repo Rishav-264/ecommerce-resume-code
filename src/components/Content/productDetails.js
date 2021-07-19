@@ -10,6 +10,9 @@ const useStyles = makeStyles((theme) => ({
     productImage:{
         height:"700px",
         width:"500px",
+        [theme.breakpoints.down('sm')]: {
+            width:"350px"
+          },
         marginTop:"10px"
     },
     info:{
@@ -28,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const ProductDetails = ({detailsToggle,setDetailsToggle,currentId,products,cart,setCart}) =>{
+const ProductDetails = ({detailsToggle,setDetailsToggle,currentId,products,cart,setCart,phoneView,setTotal,totalAmount}) =>{
 
     const[currentProduct,setCurrentProduct] = useState({});
 
@@ -50,19 +53,21 @@ const ProductDetails = ({detailsToggle,setDetailsToggle,currentId,products,cart,
         if(cart===null){
           temp.push(Id);
           setCart(temp);
+          setTotal(totalAmount+currentProduct.price);
         }else{
         for(let i=0;i<cart.length;i++){
           temp.push(cart[i]);
         }
         temp.push(Id);
         setCart(temp);
+        setTotal(totalAmount+currentProduct.price);
       }
         console.log(cart);
       }
 
     return(
         <div>
-            <Grid container>
+            {!phoneView&& <Grid container>
                 <Grid item xs={12}>
                     <IconButton onClick={detailsToggler}>
                         <ArrowBackIcon />
@@ -95,7 +100,41 @@ const ProductDetails = ({detailsToggle,setDetailsToggle,currentId,products,cart,
                     </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
+            </Grid>}
+            {phoneView && <Grid container>
+                <Grid item xs={12}>
+                    <IconButton onClick={detailsToggler}>
+                        <ArrowBackIcon />
+                    </IconButton>
+                </Grid>
+                <Grid item xs={12}>
+                    <Grid container>
+                    <Grid item xs={12}>
+                        <img src={currentProduct.imagePath} alt="product" className={classes.productImage}/>
+                    </Grid>
+                    <Grid item xs={12} className={classes.info}>
+                        <h1>{currentProduct.name}</h1>
+                        <Grid container>
+                            <Grid item xs={6}>
+                                <p className={classes.price}>₹{currentProduct.price}</p>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <p className={classes.star}><StarIcon /></p>
+                                <p className={classes.star}><StarIcon /></p>
+                                <p className={classes.star}><StarIcon /></p>
+                                <p className={classes.star}><StarIcon /></p>
+                                <p className={classes.star}><StarIcon /></p>
+                            </Grid>
+                        </Grid>
+                        <h4>Description:</h4>
+                        <p>{currentProduct.description}</p>
+                        <Button variant="contained" color="secondary" onClick={addCart}> 
+                            Add To Cart
+                        </Button>
+                    </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>}
         </div>
     )
 }

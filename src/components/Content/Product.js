@@ -26,7 +26,7 @@ const useStyles = makeStyles({
     }
   });
 
-const Product = ({name,price,imagePath,isCart,id,cart,setCart,detailsToggle,setDetailsToggle,currentId,setCurrentId}) =>{
+const Product = ({name,price,imagePath,isCart,id,cart,setCart,detailsToggle,setDetailsToggle,currentId,setCurrentId,setTotal,totalAmount}) =>{
   const classes = useStyles();
 
   const addCart=()=>{
@@ -35,12 +35,14 @@ const Product = ({name,price,imagePath,isCart,id,cart,setCart,detailsToggle,setD
     if(cart===null){
       temp.push(Id);
       setCart(temp);
+      setTotal(totalAmount+price);
     }else{
     for(let i=0;i<cart.length;i++){
       temp.push(cart[i]);
     }
     temp.push(Id);
     setCart(temp);
+    setTotal(totalAmount+price);
   }
     console.log(cart);
   }

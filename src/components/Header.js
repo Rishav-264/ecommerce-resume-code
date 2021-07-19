@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
 import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
 import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
+import MenuIcon from '@material-ui/icons/Menu';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,7 +20,10 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
       color:"black",
-      marginRight:"1rem"
+      marginRight:"1rem",
+      [theme.breakpoints.down('sm')]: {
+        display:"none"
+      },
     },
     headerNav:{
       color:"black",
@@ -26,19 +31,44 @@ const useStyles = makeStyles((theme) => ({
       padding:"0.5rem",
     },
     headerIcon:{
-      padding:"1rem"
+      padding:"1rem",
+      [theme.breakpoints.down('sm')]: {
+        padding:"10px"
+      },
     },
     header:{
         backgroundColor:"white",
-        boxShadow:"0 0"
+        boxShadow:"0 0",
+        [theme.breakpoints.down('sm')]: {
+          display:"none"
+        },
     },
     headerItems:{
         flexGrow:10
+    },
+    phoneHeader:{
+      display:"none",
+      [theme.breakpoints.down('sm')]: {
+        display:"block"
+      },
+      backgroundColor:"white",
+      boxShadow:"0 0",
+    },
+    phoneHeaderIcon:{
+      marginTop:"16px"
+    },
+    searchBar:{
+      width:"100%"
+    },
+    menuIcon:{
+      color:"black",
+      width:"100%",
+      marginRight:"20px"
     }
   }));
   
 
-const Header = ({ searchParam,setIsCart,toggleDrawer,addTotal }) =>{
+const Header = ({ searchParam,setIsCart,toggleDrawer,addTotal,togglePhoneMenu }) =>{
 
     const [search,setSearch] = useState(false);
 
@@ -49,10 +79,6 @@ const Header = ({ searchParam,setIsCart,toggleDrawer,addTotal }) =>{
     const handleSearchParam = (e) =>{
       searchParam(e.target.value);
       console.log(e.target.value);
-    }
-
-    const cartHandler = () =>{
-      setIsCart(true);
     }
 
     const classes = useStyles();
@@ -99,6 +125,32 @@ const Header = ({ searchParam,setIsCart,toggleDrawer,addTotal }) =>{
             </Typography>
            </Button>
           </div>
+        </Toolbar>
+      </AppBar>
+      <AppBar position="static" className={classes.phoneHeader}>
+        <Toolbar style={{padding:"0"}}>
+             <Grid container>
+               <Grid item xs={2}>
+                <Button className={classes.burgerButton} onClick={togglePhoneMenu}>
+                  <Typography variant="p" className={classes.phoneHeaderIcon}>
+                    <MenuIcon className={classes.menuIcon}/>
+                  </Typography>
+                </Button>
+               </Grid>
+               <Grid item xs={7}>
+                <TextField id="standard-basic" label="Standard" onChange={handleSearchParam} className={classes.searchBar} />
+               </Grid>
+               <Grid item xs={3} align="center">
+                <Button onClick={()=>{
+                  toggleDrawer(true);
+                  addTotal();
+                }}>
+                  <Typography variant="p" className={classes.phoneHeaderIcon}>
+                    <LocalMallOutlinedIcon />
+                  </Typography>
+                </Button>
+               </Grid>
+             </Grid>
         </Toolbar>
       </AppBar>
     </div>

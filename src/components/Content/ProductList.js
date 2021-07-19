@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import ProductDetails from "./productDetails";
 
-const useStyles= makeStyles({
+const useStyles= makeStyles((theme)=>({
     content: {
         flexGrow: 1,
         backgroundColor: "white",
@@ -13,9 +13,9 @@ const useStyles= makeStyles({
       root: {
         flexGrow: 1,
       },
-})
+}))
 
-const ProductList = ({ products,searchParam,isCart,cart,setCart,cartProducts }) => {
+const ProductList = ({ products,searchParam,totalAmount,cart,setCart,setTotal,phoneView }) => {
     const [detailsToggle,setDetailsToggle] = useState(false);
     const [currentId,setCurrentId] = useState(0);
 
@@ -34,11 +34,11 @@ const ProductList = ({ products,searchParam,isCart,cart,setCart,cartProducts }) 
           }
         }).map((product) => (
           <Grid key={product.id} item xs={12} sm={6} md={4} lg={3}>
-            <Product name={product.name} price={product.price} imagePath={product.imagePath} cart={cart} setCart={setCart} id={[product.id]} detailsToggle={detailsToggle} setDetailsToggle={setDetailsToggle} currentId={product.id} setCurrentId={setCurrentId}/>
+            <Product name={product.name} price={product.price} imagePath={product.imagePath} cart={cart} setCart={setCart} id={[product.id]} detailsToggle={detailsToggle} setDetailsToggle={setDetailsToggle} currentId={product.id} setCurrentId={setCurrentId} setTotal={setTotal} totalAmount={totalAmount}/>
           </Grid>
         ))}
       </Grid>}
-      {detailsToggle&&<ProductDetails detailsToggle={detailsToggle} setDetailsToggle={setDetailsToggle} currentId={currentId} products={products} cart={cart} setCart={setCart}/>}
+      {detailsToggle&&<ProductDetails detailsToggle={detailsToggle} setDetailsToggle={setDetailsToggle} currentId={currentId} products={products} cart={cart} setCart={setCart} phoneView={phoneView} setTotal={setTotal} totalAmount={totalAmount}/>}
     </main>
     )
 }
