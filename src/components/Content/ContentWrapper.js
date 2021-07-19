@@ -14,9 +14,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
         display:"block"
       },
-      [theme.breakpoints.down('lg')]: {
-        display:"none"
-      },
    }
   }));
 
@@ -26,19 +23,19 @@ const ContentWrapper = ({ products,searchParam,setCart,cart,cartProducts,totalAm
 
     return(
         <div>
-            <Grid container className={classes.desktop}>
+            {!phoneView&&<Grid container className={classes.desktop}>
                 <Grid item xs={2}>
                     <Sidebar />
                 </Grid>
                 <Grid item xs={10}>
                     <ProductList products={products} searchParam={searchParam} setCart={setCart} cart={cart} totalAmount={totalAmount} setTotal={setTotal} phoneView={phoneView}/>
                 </Grid>
-            </Grid>
-            <Grid container className={classes.phone}>
+            </Grid>}
+            {phoneView && <Grid container className={classes.phone}>
                 <Grid item xs={12}>
                     <ProductList products={products} searchParam={searchParam} setCart={setCart} cart={cart} totalAmount={totalAmount} setTotal={setTotal} phoneView={phoneView}/>
                 </Grid>
-            </Grid>
+            </Grid>}
         </div>
     )
 }
