@@ -207,6 +207,8 @@ function App() {
       'https://checkout.razorpay.com/v1/checkout.js'
     );
 
+    let cost = parseInt(totalAmount) * 100;
+
     if (!res) {
       alert('Razorpay SDK failed to load. Are you online?');
       return;
@@ -215,7 +217,7 @@ function App() {
     const options = {
       key: 'rzp_test_0ORzc2sYe5nR15',
       currency: 'INR',
-      amount: '50000',
+      amount: cost.toString(),
       // order_id: "order_9A33XWu170gUtm",
       name: 'Test Payment',
       description: 'Thank you.',
