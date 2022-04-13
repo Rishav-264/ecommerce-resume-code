@@ -19,22 +19,24 @@ import Collapse from '@material-ui/core/Collapse';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 
 
 const useStyles = makeStyles((theme)=>({
  drawer:{
    maxWidth:"25rem",
-   minWidth:"17rem",
+   minWidth:"22rem",
    textAlign:"left",
    fontWeight:"bold",
+   
    [theme.breakpoints.down('sm')]: {
     maxWidth: "23rem",
   },
  },
  drawerName:{
-   padding:"10px",
-   margin:"10px"
+   margin:'0.7rem 8px'
  },
  root: {
   display: 'flex',
@@ -80,6 +82,41 @@ title: {
 spaceHolder:{
   width:"50%",
   minWidth:"40px"
+},
+profileContainer:{
+  // display:'flex',
+  // alignItems:'right',
+  // justifyContent:'right'
+},
+profileIcon:{
+  float:'left',
+  margin:'0.5rem'
+},
+profileText:{
+  padding:'5px',
+  "& h3":{
+    margin:'0',
+    fontSize:'14px',
+    fontWeight:500
+  },
+  "& span":{
+    fontSize:'18px'
+  }
+},
+cartHeader:{
+  display:'flex'
+},
+cartIcon:{
+  margin:'1rem 0'
+},
+paymentButton:{
+  cursor:'pointer',
+  padding:"3px",
+  textAlign:'center',
+  backgroundColor:"#1F0824",
+  "& p":{
+    color:"white",
+  }
 }
 }));
 
@@ -156,6 +193,51 @@ function App() {
       setCart(temp);
     }
 
+    function loadScript(src) {
+      return new Promise((resolve) => {
+        const script = document.createElement('script')
+        script.src = src
+        script.onload = () => {
+          resolve(true)
+        }
+        script.onerror = () => {
+          resolve(false)
+        }
+        document.body.appendChild(script)
+      })
+    }
+    
+    async function displayRazorpay() {
+      const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')
+  
+      if (!res) {
+        alert('Razorpay SDK failed to load. Are you online?')
+        return
+      }
+  
+      const options = {
+        key: 'rzp_test_0ORzc2sYe5nR15',
+        currency: "INR",
+        amount: "50000",
+        // order_id: "order_9A33XWu170gUtm",
+        name: 'Test Payment',
+        description: 'Thank you.',
+        image: '/profileImage.jpg',
+        handler: function (response) {
+          // alert(response.razorpay_payment_id)
+          // alert(response.razorpay_order_id)
+          // alert(response.razorpay_signature)
+        },
+        prefill: {
+        "name": "Rishav Gooptu",
+        "email": "rishav.gooptu@example.com",
+        "contact": "9999999999"
+        }
+      }
+      const paymentObject = new window.Razorpay(options)
+      paymentObject.open()
+    }
+
   return (
     <div className="App">
       <Header searchParam={setParam} setIsCart={setIsCart} open={drawerOpen} setOpen={setOpen} toggleDrawer={toggleDrawer} addTotal={addTotal} togglePhoneMenu={togglePhoneMenu}/>
@@ -163,9 +245,22 @@ function App() {
       {/* {setProducts(productsData)} */}
       <Drawer anchor={anchor} open={drawerOpen} onClose={()=>{toggleDrawer(false)}} onOpen={addTotal}>
         <div className={classes.drawer}>
+          <div className={classes.profileContainer}>
+            <Avatar className={classes.profileIcon} alt="Remy Sharp" src="/profileImage.jpg" />
+            <div className={classes.profileText}>
+              <h3>Welcome,</h3>
+              <span>Rishav Gooptu</span>
+            </div>
+          </div>
+          <hr />
+          <div className={classes.cartHeader}>
           <Typography variant="h4" className={classes.drawerName}>
-                Shopping Cart
+                My Cart
           </Typography>
+          <div className={classes.cartIcon}> 
+          <AddShoppingCartIcon style={{fontSize:'30px'}}/>
+          </div>
+          </div>
           {cartProducts.map((product)=>(
            <Card className={classes.root}>
             <CardMedia
@@ -195,6 +290,9 @@ function App() {
           <Typography component="h6" variant="h5" className={classes.drawerName}>
                  Total Amount : ₹{totalAmount}
           </Typography>
+          <div className={classes.paymentButton} onClick={displayRazorpay}>
+            <p>Pay Now</p>
+          </div>
         </div>
       </Drawer>
       {phoneView && <Drawer anchor={phoneMenuAnchor} open={phoneMenuOpen} onClose={()=>{togglePhoneMenu(false)}}>
